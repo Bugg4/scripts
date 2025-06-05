@@ -1,0 +1,2 @@
+#!/bin/bash
+mkdir -p "$HOME/Screenshots" && grim -t png -g "$(slurp -d)" - | tee "$HOME/Screenshots/$(date +%Y-%m-%d--%H-%M-%S-%3N).png" | wl-copy
