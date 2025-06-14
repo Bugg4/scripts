@@ -1,2 +1,13 @@
 #!/bin/bash
-mkdir -p "$SCREENSHOTS_DIR" && grim -t png -g "$(slurp -d)" - | tee "$SCREENSHOTS_DIR/$(date +%Y-%m-%d--%H-%M-%S-%3N).png" | wl-copy
+
+# Create the screenshots directory if it doesn't exist.
+mkdir -p "$SCREENSHOTS_DIR"
+
+# Run slurp to select a region.
+if selection=$(slurp -d); then
+  # If slurp exits successfully (i.e., a region was selected),
+  # then capture the screen, save it, and copy it to the clipboard.
+  filename=$(date +%Y-%m-%d--%H-%M-%S-%3N).png
+  grim -t png -g "$selection" - | tee "$SCREENSHOTS_DIR/$filename" | wl-copy
+  notify-send --app-name="grimshot" --expire-time=10000 --icon=$SCREENSHOTS_DIR/$filename "Screenshot saved: $filename"
+fi
