@@ -26,6 +26,6 @@ DEST="$BASE_DEST/$DATE/home"
 mkdir -p "$DEST"
 
 # --- Run rsync with filters from the ignore file ---
-rsync -av --ignore-case \
+rsync -av \
     --exclude-from="$IGNORE_FILE" \
     "$SOURCE" "$DEST"
