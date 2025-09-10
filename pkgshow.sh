@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Prints PKGBUILD of a given package name
+
 # take first arg or stdin
 if [[ -n "${1-}" ]]; then
     pkname="$1"
