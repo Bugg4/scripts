@@ -14,19 +14,31 @@ sub transform {
     my ($text) = @_;
 
     $text =~ s{
-        \{\{<\s*callout(?:\s+type=(\w+))?\s*>\}  # opening shortcode
-        (.*?)                                    # body
-        \{\{<\s*/callout\s*>\}\}                 # closing shortcode
+        \{\{<\s*callout(?:\s+type=(\w+))?\s*>\}\}   # opening shortcode
+        (.*?)                                       # body
+        \{\{<\s*/?\s*callout\s*>\}\}                # closing shortcode (forgiving of malformed closing tags)
     }{
         my $type = $1 // 'warning';
+        my %map  = (info=>'NOTE', warning=>'WARNING', important=>'IMPORTANT');
         my $hdr  = $map{lc $type} // uc($type);
         my $body = $2;
+
+        # Trim leading/trailing newlines inside the callout
+        $body =~ s/^\n+//;
+        $body =~ s/\n+$//;
+
+        # If the very first line is empty, drop it
+        $body =~ s/^\s*\n//;
+
+        # Prefix all lines (including blanks) with "> "
         $body =~ s/^/> /mg;
-        "> [$hdr]\n$body"
+
+        "> [!$hdr]\n$body"
     }egsx;
 
     return $text;
 }
+
 
 sub process_file {
     my ($file) = @_;
