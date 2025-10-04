@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Create the screenshots directory if it doesn't exist.
+mkdir -p "/home/marco/videos"
+
+# Run slurp to select a region.
+if selection=$(slurp -d); then
+  # If slurp exits successfully (i.e., a region was selected),
+  # then capture the screen, save it, and copy it to the clipboard.
+  filename=/home/marco/videos/rec-$(date +%Y-%m-%d--%H-%M-%S-%3N).mp4
+  wf-recorder -g "$selection" -f $filename
+  notify-send --app-name="grimshot" --expire-time=10000 "Screen recording saved: $filename"
+fi
